@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.app.beans.CredentialsBean;
 import com.app.constants.Constants;
@@ -38,6 +39,7 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 	private FieldRepository fieldRepository;
 	private FieldValueRepository fieldValueRepository;
 	private UserRepository userRepository;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public Mutation(AssetRepository assetRepository, AssetValueRepository assetValueRepository,
 			FieldRepository fieldRepository, FieldValueRepository fieldValueRepository, UserRepository userRepository) {
@@ -46,6 +48,7 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 		this.fieldRepository = fieldRepository;
 		this.fieldValueRepository = fieldValueRepository;
 		this.userRepository = userRepository;
+		this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
 	}
 
 	public AssetModel newAsset(AssetDTO assetDTO) {
@@ -59,13 +62,13 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 	public AssetValueModel upsertAssetValue(AssetValueDTO assetValueDTO) {
 		AssetValueModel assetValueModel = null;
 		String assetValueId = assetValueDTO.getAssetValueId();
-		if(StringUtils.isNotBlank(assetValueId)) {
+		if (StringUtils.isNotBlank(assetValueId)) {
 			assetValueModel = assetValueRepository.findOne(assetValueId);
-			if(assetValueModel != null) {
+			if (assetValueModel != null) {
 				List<FieldValueModel> fieldValueModelList = fieldValueRepository.findByAssetValueId(assetValueId);
-				for(FieldValueModel fieldValueModel: fieldValueModelList) {
+				for (FieldValueModel fieldValueModel : fieldValueModelList) {
 					for (FieldValueDTO fieldValueDTO : assetValueDTO.getFieldValues()) {
-						if(fieldValueModel.getKey().equals(fieldValueDTO.getKey())) {							
+						if (fieldValueModel.getKey().equals(fieldValueDTO.getKey())) {
 							fieldValueModel.setValue(fieldValueDTO.getValue());
 							fieldValueRepository.save(fieldValueModel);
 						}
@@ -112,7 +115,7 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 	public GenericDTO login(CredentialsBean credentials) {
 		GenericDTO genericDTO = new GenericDTO();
 		String username = credentials.getUsername();
-		String password = credentials.getPassword();
+		String rawPassword = credentials.getPassword();
 		System.out.println("Login Username" + username);
 		UserModel userItem = userRepository.findByUsername(username);
 		if (userItem == null) {
@@ -120,8 +123,8 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 			genericDTO.setErrorMessage("User does not exists!");
 			return genericDTO;
 		}
-		String dbPassword = userItem.getPassword();
-		if (!dbPassword.equalsIgnoreCase(password)) {
+		String encryptedPasswordInDB = userItem.getPassword();
+		if (!bCryptPasswordEncoder.matches(rawPassword, encryptedPasswordInDB)) {
 			genericDTO.setErrorCode("ERR_403");
 			genericDTO.setErrorMessage("Incorrect Credentials!");
 			return genericDTO;
@@ -131,7 +134,7 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 		if (CommonUtils.checkAuthentication(authentication)) {
 			System.out.println("Already Authenticated!" + authentication);
 		} else {
-			authentication = new UsernamePasswordAuthenticationToken(username, password, AUTHORITIES);
+			authentication = new UsernamePasswordAuthenticationToken(username, encryptedPasswordInDB, AUTHORITIES);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 		System.out.println("httpSession" + httpSession.getId());
@@ -143,7 +146,8 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 	public GenericDTO signUp(UserModel userDetails) {
 		GenericDTO genericDTO = new GenericDTO();
 		String username = userDetails.getUsername();
-		String password = userDetails.getPassword();
+		String encryptedPassword = bCryptPasswordEncoder.encode(userDetails.getPassword());
+		userDetails.setPassword(encryptedPassword);
 		UserModel userItem = userRepository.findOne(username);
 		if (userItem != null) {
 			genericDTO.setErrorCode("ERR_500");
@@ -156,7 +160,7 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 		if (CommonUtils.checkAuthentication(authentication)) {
 			System.out.println("Already Authenticated!" + authentication);
 		} else {
-			authentication = new UsernamePasswordAuthenticationToken(username, password, AUTHORITIES);
+			authentication = new UsernamePasswordAuthenticationToken(username, encryptedPassword, AUTHORITIES);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 		System.out.println("httpSession" + httpSession.getId());
