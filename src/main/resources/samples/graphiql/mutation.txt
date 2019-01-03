@@ -1,0 +1,29 @@
+New Author Mutation
+=====================
+
+SignUp
+=====================
+mutation signUp($userDetails: UserDTO!) {
+  signUp(userDetails: $userDetails)
+}
+
+{
+  "userDetails":{
+  	"username": "Zhandu",
+    "password": "Lal",
+    "firstName": "Zhmu",
+    "lastName": "Dimag",
+    "dateOfBirth": 1234
+	}
+}
+
+Login
+====================
+mutation login($credentials: LoginDTO!) {
+  login(credentials: $credentials)
+}
+
+{
+    username: "Zhandu",
+    password: "Lal"
+}

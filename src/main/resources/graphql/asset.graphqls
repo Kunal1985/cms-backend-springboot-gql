@@ -1,0 +1,16 @@
+type Asset {
+    type: String!
+    fields: [Field]
+}
+
+extend type Query {
+    findAllAssets: [Asset]!
+}
+
+input AssetDTO {
+    type: String!
+}
+
+extend type Mutation {
+    newAsset(assetDTO: AssetDTO!) : Asset!
+}

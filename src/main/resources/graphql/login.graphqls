@@ -1,0 +1,34 @@
+type User {
+    username: String!
+    firstName: String!
+    lastName: String!
+    dateOfBirth: Float!
+}
+
+type Query {
+    findAllUsers: [User]!
+}
+
+type Mutation {
+    login(credentials: LoginDTO!): GenericDTO!
+    signUp(userDetails: UserDTO!): GenericDTO!
+}
+
+type GenericDTO {
+	token: String
+	errorCode: String
+	errorMessage: String
+}
+
+input LoginDTO {
+    username: String!
+    password: String!
+}
+
+input UserDTO {
+    username: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    dateOfBirth: Float!
+}

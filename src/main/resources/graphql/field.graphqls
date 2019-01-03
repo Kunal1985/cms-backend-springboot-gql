@@ -1,0 +1,30 @@
+type Field {
+    id: ID!
+    name: String!
+    dataType: String!
+    optional: Boolean!
+    isMulti: Boolean!
+    multiType: String!
+    isAssetRef: Boolean!
+    assetId: String
+}
+
+extend type Query {
+    findAllFields: [Field]!
+}
+
+input FieldDTO {
+    name: String!
+    dataType: String!
+    optional: Boolean!
+    isMulti: Boolean!
+    multiType: String!
+    isAssetRef: Boolean!
+    assetId: String
+}
+
+
+extend type Mutation {
+    newField(fieldDTO: FieldDTO!) : Field!
+    deleteField(fieldId: String!) : String!
+}

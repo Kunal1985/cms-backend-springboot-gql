@@ -1,0 +1,3 @@
+{
+	"query": "{findAllAuthors {id firstName lastName }}"
+}

@@ -1,0 +1,21 @@
+type AssetValue {
+    id: ID!
+    type: String!
+    fields: [Field]!
+    fieldValues: [FieldValue]!
+}
+
+extend type Query {
+    findAllAssetValues: [AssetValue]!
+    findAssetValuesByType(assetType: String!): [AssetValue]!
+}
+
+input AssetValueDTO {
+	assetValueId: String
+    type: String!
+    fieldValues: [FieldValueDTO]!
+}
+
+extend type Mutation {
+    upsertAssetValue(assetValueDTO: AssetValueDTO!) : AssetValue!
+}

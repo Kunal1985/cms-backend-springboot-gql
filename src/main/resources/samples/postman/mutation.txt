@@ -1,0 +1,7 @@
+{
+  "query": "mutation newAuthor($firstName: String!, $lastName: String!) { newAuthor(firstName: $firstName, lastName: $lastName) { id firstName lastName } }",
+  "variables": {
+	  "firstName": "Kalya3",
+	  "lastName": "Talli3"
+	}
+}

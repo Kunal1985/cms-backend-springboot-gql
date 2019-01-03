@@ -1,0 +1,20 @@
+type FieldValue {
+    id: ID!
+    key: String!
+    value: String!
+    assetValueId: String!
+}
+
+extend type Query {
+    findAllFieldValues: [FieldValue]!
+}
+
+input FieldValueDTO {
+    key: String!
+    value: String!
+}
+
+
+extend type Mutation {
+    newFieldValue(fieldValueDTO: FieldValueDTO!) : FieldValue!
+}

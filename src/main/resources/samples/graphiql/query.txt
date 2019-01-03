@@ -1,0 +1,7 @@
+{
+  findAllAuthors {
+    id 
+    firstName
+    lastName
+  }
+}
