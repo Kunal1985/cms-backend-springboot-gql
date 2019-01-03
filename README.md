@@ -13,6 +13,17 @@ OR
 `mvn clean` followed by `mvn install`  
 NOTE: `mvn clean` is required as per individual machine configurations.
 
+## Configurations
+### Mongo Configuration
+All the MongoDB related configurations present under src\main\resources\application.properties
+
+### GraphQL Configurations/Samples
+#### Configurations
+GraphQL Definitions for Query/Mutation can be found under the folder - src\main\resources\graphql
+
+#### Samples
+GraphQL Samples for Query/Mutation can be found under the folder - src\main\resources\samples
+
 ## Running the Application
 ### Start the SpringBoot Application Server
 Navigate to CMSApplication.java  
@@ -20,13 +31,6 @@ Run/Debug As Java Application.
 
 ### Accessing the application
 http://localhost:8080/graphiql >> GraphiQL Interface
-
-## GraphQL Configurations/Samples
-### Configurations
-GraphQL Definitions for Query/Mutation can be found under the folder - src\main\resources\graphql
-
-### Samples
-GraphQL Samples for Query/Mutation can be found under the folder - src\main\resources\samples
 
 # License
 MIT
