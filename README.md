@@ -4,7 +4,8 @@ Backend-CMS application developed using SpringBoot-GraphQL.
 ## Pre-Requisites
 Maven  
 Java 8 (minimum required)  
-Building a GraphQL Server with Spring Boot (https://www.pluralsight.com/guides/java-and-j2ee/building-a-graphql-server-with-spring-boot). 
+Building a GraphQL Server with Spring Boot (https://www.pluralsight.com/guides/java-and-j2ee/building-a-graphql-server-with-spring-boot).  
+MongoDB (3.xx)
 
 ## Installation
 ### Install Basic Maven Packages from pom.xml
