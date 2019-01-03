@@ -1,6 +1,5 @@
 package com.app.entity.models;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,15 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class UserModel {
 	@Id
-	@Column(name = "username", nullable = false)
 	private String username;
-	@Column(name = "password", nullable = false)
 	private String password;
-	@Column(name = "first_name", nullable = false)
 	private String firstName;
-	@Column(name = "last_name", nullable = false)
 	private String lastName;
-	@Column(name = "date_of_birth", nullable = false)
 	private Long dateOfBirth;
 
 	public String getUsername() {
