@@ -66,12 +66,22 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 			assetValueModel = assetValueRepository.findOne(assetValueId);
 			if (assetValueModel != null) {
 				List<FieldValueModel> fieldValueModelList = fieldValueRepository.findByAssetValueId(assetValueId);
-				for (FieldValueModel fieldValueModel : fieldValueModelList) {
-					for (FieldValueDTO fieldValueDTO : assetValueDTO.getFieldValues()) {
+				for (FieldValueDTO fieldValueDTO : assetValueDTO.getFieldValues()) {
+					boolean fieldFound = false;
+					for (FieldValueModel fieldValueModel : fieldValueModelList) {
 						if (fieldValueModel.getKey().equals(fieldValueDTO.getKey())) {
 							fieldValueModel.setValue(fieldValueDTO.getValue());
 							fieldValueRepository.save(fieldValueModel);
+							fieldFound = true;
+							break;
 						}
+					}
+					if(!fieldFound) {
+						FieldValueModel newFieldValueModel = new FieldValueModel();
+						newFieldValueModel.setKey(fieldValueDTO.getKey());
+						newFieldValueModel.setValue(fieldValueDTO.getValue());
+						newFieldValueModel.setAssetValueId(assetValueId);
+						fieldValueRepository.save(newFieldValueModel);
 					}
 				}
 			}

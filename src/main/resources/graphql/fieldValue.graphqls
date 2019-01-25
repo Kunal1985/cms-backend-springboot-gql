@@ -1,7 +1,7 @@
 type FieldValue {
     id: ID!
     key: String!
-    value: String!
+    value: String
     assetValueId: String!
 }
 
@@ -11,10 +11,7 @@ extend type Query {
 
 input FieldValueDTO {
     key: String!
-    value: String!
-}
-
-
-extend type Mutation {
-    newFieldValue(fieldValueDTO: FieldValueDTO!) : FieldValue!
+    value: String
+    dataType: String!
+    isAssetRef: Boolean!
 }

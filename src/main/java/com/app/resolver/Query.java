@@ -62,7 +62,8 @@ public class Query implements GraphQLQueryResolver {
 		if (!CommonUtils.checkAuthentication(authentication)) {
 			throw new AnonymousAccessException();
 		}
-		return assetValueRepository.findByType(assetType);
+		Iterable<AssetValueModel> assetValueList = assetValueRepository.findByType(assetType);
+		return assetValueList;
 	}
 
 	public Iterable<FieldModel> findAllFields() throws AnonymousAccessException {
