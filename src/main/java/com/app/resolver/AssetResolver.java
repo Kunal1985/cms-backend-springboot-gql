@@ -1,5 +1,8 @@
 package com.app.resolver;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,9 @@ public class AssetResolver implements GraphQLResolver<AssetModel> {
 		this.fieldRepository = fieldRepository;
 	}
 
-	public Iterable<FieldModel> getFields(AssetModel assetModel) {
-		return fieldRepository.findByAssetId(assetModel.getType());
+	public List<FieldModel> getFields(AssetModel assetModel) {
+		List<FieldModel> fieldModelList = fieldRepository.findByAssetId(assetModel.getType());
+		Collections.sort(fieldModelList, new FieldModel.SortBySortOrder());		
+		return fieldModelList;
 	}
 }

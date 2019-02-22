@@ -16,6 +16,8 @@ import com.app.constants.Constants;
 import com.app.dto.AssetDTO;
 import com.app.dto.AssetValueDTO;
 import com.app.dto.FieldValueDTO;
+import com.app.dto.SortedFieldDTO;
+import com.app.dto.SortedFieldListDTO;
 import com.app.entity.models.AssetModel;
 import com.app.entity.models.AssetValueModel;
 import com.app.entity.models.FieldModel;
@@ -107,6 +109,16 @@ public class Mutation implements GraphQLMutationResolver, Constants {
 			throw new GenericGQLException("Field already present!", "ERR_ALREADY_EXIST");
 		fieldRepository.save(fieldModel);
 		return fieldModel;
+	}
+	
+	public boolean sortFields(SortedFieldListDTO sortedFieldListDTO) {
+		List<SortedFieldDTO> sortedFieldList = sortedFieldListDTO.getFields();
+		for(SortedFieldDTO sortedField: sortedFieldList) {
+			FieldModel fieldModel = fieldRepository.findOne(sortedField.getId());
+			fieldModel.setSortOrder(sortedField.getSortOrder());
+			fieldRepository.save(fieldModel);
+		}
+		return true;
 	}
 
 	public String deleteField(String fieldId) {
