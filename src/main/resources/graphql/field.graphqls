@@ -7,6 +7,7 @@ type Field {
     multiType: String!
     isAssetRef: Boolean!
     assetId: String
+    sortOrder: Int
 }
 
 extend type Query {
@@ -21,10 +22,20 @@ input FieldDTO {
     multiType: String!
     isAssetRef: Boolean!
     assetId: String
+    sortOrder: Int
 }
 
+input SortedFieldListDTO {
+	fields: [SortedFieldDTO]
+}
+
+input SortedFieldDTO {
+	id: ID!
+	sortOrder: Int
+}
 
 extend type Mutation {
     newField(fieldDTO: FieldDTO!) : Field!
     deleteField(fieldId: String!) : String!
+    sortFields(sortedFields: SortedFieldListDTO!): Boolean! 
 }

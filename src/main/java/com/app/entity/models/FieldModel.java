@@ -1,5 +1,7 @@
 package com.app.entity.models;
 
+import java.util.Comparator;
+
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,6 +24,8 @@ public class FieldModel {
 	private Boolean isAssetRef;
 
 	private String assetId;
+	
+	private int sortOrder;
 
 	public FieldModel() {
 	}
@@ -37,6 +41,7 @@ public class FieldModel {
 		this.isMulti = fieldModel.isMulti;
 		this.multiType = fieldModel.multiType;
 		this.isAssetRef = fieldModel.isAssetRef;
+		this.sortOrder = fieldModel.sortOrder;
 	}
 
 	public String getId() {
@@ -103,6 +108,14 @@ public class FieldModel {
 		this.assetId = assetId;
 	}
 
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(int sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -123,7 +136,15 @@ public class FieldModel {
 	@Override
 	public String toString() {
 		return String.format(
-				"FieldModel { identifier: '%s', name: '%s', dataType: '%s', optional: '%s', isMulti: '%s', multiType: '%s', isMultiSelect: '%s'}",
-				id, name, dataType, optional, isMulti, multiType, isAssetRef);
+				"FieldModel { identifier: '%s', name: '%s', dataType: '%s', optional: '%s', isMulti: '%s', multiType: '%s', isMultiSelect: '%s', sortOrder: '%s'}",
+				id, name, dataType, optional, isMulti, multiType, sortOrder);
+	}
+	
+	public static class SortBySortOrder implements Comparator<FieldModel> {
+
+		@Override
+		public int compare(FieldModel fieldModel1, FieldModel fieldModel2) {
+			return fieldModel1.getSortOrder() - fieldModel2.getSortOrder();			
+		}
 	}
 }
